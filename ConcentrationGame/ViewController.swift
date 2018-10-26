@@ -44,6 +44,10 @@ class ViewController: UIViewController
 		
 		FlipCountLabel.text = "Flips count: \(FlipCount)"
 		
+		// Text comment
+		
+		
+		
 	}
 	
 	
