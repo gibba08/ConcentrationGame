@@ -11,19 +11,41 @@ import UIKit
 class ViewController: UIViewController
 {
 	var FlipCount = 0
+	{
+		didSet
+		{
+			FlipCountLabel.text = "Flips count: \(FlipCount)"
+		}
+	}
 	
 	@IBOutlet weak var FlipCountLabel: UILabel!
 	
+	@IBOutlet var cardButtons: [UIButton]!
+	
+	/* 	crea un array di carte
+		quando premi una carta controlla nell'array
+		per sapere se girarla
+		check in un altro array di emoji
+	*/
 	@IBAction func touchCard(_ sender: UIButton)
 	{
-		flipCard(withEmoji: "👻", on: sender)
+		//flipCard(withEmoji: "👻", on: sender)
+		if let cardNumber = cardButtons.index(of: sender)
+		{
+			print("cardNumber: \(cardNumber)")
+		}
+		else
+		{
+			print("Chosen card is not in the array")
+		}
+		
+		
+		
+		
+		FlipCount+=1
 	}
 	
-	@IBAction func touchCard2(_ sender: UIButton)
-	{
-		flipCard(withEmoji: "🎃", on: sender)
-	}
-	
+
 
 	func flipCard(withEmoji emoji: String, on button: UIButton)
 	{
@@ -39,17 +61,9 @@ class ViewController: UIViewController
 			button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
 		}
 		
-		FlipCount+=1
-		print("\(FlipCount)")
-		
-		FlipCountLabel.text = "Flips count: \(FlipCount)"
-		
-		// Text comment
-		
+
 		
 		
 	}
-	
-	
 }
 
