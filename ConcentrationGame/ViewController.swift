@@ -8,21 +8,18 @@
 
 import UIKit
 
+
 class ViewController: UIViewController
 {
-	var FlipCount = 0
-	{
-		didSet
-		{
-			FlipCountLabel.text = "Flips count: \(FlipCount)"
-		}
-	}
 	
+	// classes get a free initializer as long as all its var are initialized
+	lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1 ) / 2)
+	
+	var FlipCount = 0 { didSet {FlipCountLabel.text = "Flips count: \(FlipCount)"}}
+
 	@IBOutlet weak var FlipCountLabel: UILabel!
-	
 	@IBOutlet var cardButtons: [UIButton]! 			// cards array
-	var emojiChoices = ["🎃", "👻", "🎃", "👻"] 	//emojis array
-	
+
 
 	@IBAction func touchCard(_ sender: UIButton)
 	{
@@ -31,8 +28,8 @@ class ViewController: UIViewController
 		// check if chosen card is in cards array
 		if let cardNumber = cardButtons.index(of: sender)
 		{
-			// assign it an emoji based on its index
-			flipCard(withEmoji: emojiChoices[cardNumber], on: sender)
+			game.chooseCard(at: cardNumber)
+			updateViewFromModel()
 		}
 		else
 		{
@@ -40,21 +37,34 @@ class ViewController: UIViewController
 		}
 	}
 	
-
-
-	func flipCard(withEmoji emoji: String, on button: UIButton)
+	func updateViewFromModel()
 	{
-		print("withEmoji \(emoji)")
-		if button.currentTitle == emoji
+		for index in cardButtons.indices
 		{
-			button.setTitle("", for: UIControl.State.normal)
-			button.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
-		}
-		else
-		{
-			button.setTitle(emoji, for: UIControl.State.normal)
-			button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+			print("index \(index)")
+			let button 	= cardButtons[index]
+			let card 	= game.cards[index]
+
+			if card.isFaceUp
+			{
+				button.setTitle(emoji(for: card), for: UIControl.State.normal)
+				button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+			}
+			else
+			{
+				button.setTitle("", for: UIControl.State.normal)
+				button.backgroundColor = card.isMatched ? #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 0) : #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+			}
 		}
 	}
+	
+	var emogiChoices = ["🦇" , "😱", "🙀", "😈", "🎃" , "👻", "🍭" , "🍬", "🍎" ]
+	
+	func emoji(for card: Card)-> String
+	{
+		return "?"
+	}
+
+
 }
 
